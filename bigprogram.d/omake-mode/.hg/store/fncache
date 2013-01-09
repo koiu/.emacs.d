@@ -1,0 +1,6 @@
+data/omake-mode.el.i
+data/doc/Makefile.i
+data/.hgignore.i
+data/doc/conf.py.i
+data/doc/make.bat.i
+data/doc/index.rst.i
