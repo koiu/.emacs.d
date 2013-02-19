@@ -1,51 +1,51 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Usage
 
-; in .emacs:
-;   (add-to-list 'load-path "THE DIRECTORY THIS ELISP EXISTS")
-;   (require 'omake-mode)
-;   (setq omake-program-path "/omake/or/jomake/path")
-;   (setq omake-program-arguments "-P -w -j 3 --verbose")
-;      ; omake command options. -w and --verbose are required for error browsing
-;   (setq omake-error-highlight-background "#880000")
-;
-;   ; key bindings (jfuruse's setting)
-;   (global-unset-key "\M-P") ; Shift+Alt+p 
-;   (global-unset-key "\M-N") ; Shift+Alt+n
-;   (global-unset-key "\M-o") ; Alt+o
-;   (global-unset-key "\M-O") ; Shift+Alt+o
-;   (global-unset-key [(control shift o)]) ; Ctrl+Shift+o
-;
-;   (global-set-key "\M-O" 'omake-run)
-;      ; launch a new omake process in the current buffer's directory
-;
-;   (global-set-key [(control shift o)] 'omake-rerun)
-;      ; restart omake process of the current omake buffer
-;
-;   (global-set-key "\M-P" 'omake-previous-error)
-;   (global-set-key "\M-N" 'omake-next-error)
-;      ; visit the previous/next error of the current omake window
-;
-;   (global-set-key "\M-o" 'omake-round-visit-buffer)
-;      ; visit another omake process window
-;
-;   ; aother possibilities
-;   (global-unset-key [M-up])
-;   (global-unset-key [M-down])
-;   (global-set-key [M-up] 'omake-previous-error)
-;   (global-set-key [M-down] 'omake-next-error)
+					; in .emacs:
+					;   (add-to-list 'load-path "THE DIRECTORY THIS ELISP EXISTS")
+					;   (require 'omake-mode)
+					;   (setq omake-program-path "/omake/or/jomake/path")
+					;   (setq omake-program-arguments "-P -w -j 3 --verbose")
+					;      ; omake command options. -w and --verbose are required for error browsing
+					;   (setq omake-error-highlight-background "#880000")
+					;
+					;   ; key bindings (jfuruse's setting)
+					;   (global-unset-key "\M-P") ; Shift+Alt+p 
+					;   (global-unset-key "\M-N") ; Shift+Alt+n
+					;   (global-unset-key "\M-o") ; Alt+o
+					;   (global-unset-key "\M-O") ; Shift+Alt+o
+					;   (global-unset-key [(control shift o)]) ; Ctrl+Shift+o
+					;
+					;   (global-set-key "\M-O" 'omake-run)
+					;      ; launch a new omake process in the current buffer's directory
+					;
+					;   (global-set-key [(control shift o)] 'omake-rerun)
+					;      ; restart omake process of the current omake buffer
+					;
+					;   (global-set-key "\M-P" 'omake-previous-error)
+					;   (global-set-key "\M-N" 'omake-next-error)
+					;      ; visit the previous/next error of the current omake window
+					;
+					;   (global-set-key "\M-o" 'omake-round-visit-buffer)
+					;      ; visit another omake process window
+					;
+					;   ; aother possibilities
+					;   (global-unset-key [M-up])
+					;   (global-unset-key [M-down])
+					;   (global-set-key [M-up] 'omake-previous-error)
+					;   (global-set-key [M-down] 'omake-next-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Configurables
 
-; omake path and args
+					; omake path and args
 (defconst omake-program-path "/mnt/global/base/bin/jomake")
 (defconst omake-program-arguments "-P -w -j 3 --verbose")
 
-; sounds
+					; sounds
 (defconst omake-sound-success "/home/jfuruse/sounds/eu2/hihat.wav")
 (defconst omake-sound-error "/usr/share/sounds/pop.wav")
 (defconst omake-sound-start "/home/jfuruse/sounds/eu2/if_nope.wav")
 
-; colors
+					; colors
 (defconst omake-error-highlight-background "#FFFF00")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,7 +56,8 @@
 (defconst omake-buffer-pattern "^\*omake\*")
 (defconst omake-misc-buffer-name "*omake-misc*")
 
-(defconst omake-error-regexp "File \"\\(.*\\)\", line \\([0-9]+\\), characters \\([0-9]+\\)-\\([0-9]+\\)")
+;;(defconst omake-error-regexp "File \"\\(.*\\)\", line \\([0-9]+\\), characters \\([0-9]+\\)-\\([0-9]+\\)")
+(defconst omake-error-regexp ".*error.*")
 (defconst omake-progress-regexp "\\[\\([= ]+\\|saved \\.omakedb[= ]*\\)\\] [0-9]+ / [0-9]+\n")
 (defconst omake-directory-regexp "- exit \\([^ ]+\\)")
 
@@ -68,7 +69,7 @@
 
 (defvar omake-buffers nil)
 
-; overlay
+					; overlay
 (setq omake-overlay-log nil)
 (setq omake-overlay-source nil)
 
@@ -92,7 +93,7 @@
       (setq omake-overlay-source (omake-create-overlay)))
   (move-overlay omake-overlay-source start end buffer))
 
-; CR jfuruse: use the variable above!
+					; CR jfuruse: use the variable above!
 (defconst omake-font-lock-keywords
   (list 
    (cons omake-error-regexp font-lock-warning-face)
@@ -103,15 +104,15 @@
 
 (defun omake-fold (f st lst)
   (if lst (omake-fold f (funcall f st (car lst)) (cdr lst))
-      st))
+    st))
 
-; oh shit, we really have no recursion in elisp
-; (defun omake-filter (p lst)
-;   (if lst
-;       (if (funcall p (car lst))
-;           (cons (car lst) (omake-filter p (cdr lst)))
-;         (omake-filter p (cdr lst)))
-;     nil))
+					; oh shit, we really have no recursion in elisp
+					; (defun omake-filter (p lst)
+					;   (if lst
+					;       (if (funcall p (car lst))
+					;           (cons (car lst) (omake-filter p (cdr lst)))
+					;         (omake-filter p (cdr lst)))
+					;     nil))
 
 (defun omake-filter-rev (p lst)
   (let ((res nil))
@@ -120,7 +121,7 @@
 
 (defun omake-filter (p lst)
   (reverse (omake-filter-rev p lst)))
-  
+
 (defun omake-filter-map (p lst)
   (if lst
       (let ((x (funcall p (car lst))))
@@ -196,14 +197,14 @@
         (setq mode-line-process (replace-match "" t nil string)))
     (setq mode-line-process nil)))
 
-; place holder for last-progress-meter
+					; place holder for last-progress-meter
 ;; CR jfuruse: this must be buffer specific
 (setq last-progress-meter nil)
 
 (defun omake-process-filter (process output)
   (save-current-buffer
     (let ((buffer (process-buffer process)))
-      ; if buffer is gone, we do nothing.
+					; if buffer is gone, we do nothing.
       (if buffer 
           (progn
             (set-buffer buffer)
@@ -216,7 +217,7 @@
             ;; if we print progress meter in the last call, delete it
             (if last-progress-point
                 (save-excursion
-            (delete-region last-progress-point (point-max))))
+		  (delete-region last-progress-point (point-max))))
             
             ;; fix  => \n
             (while (string-match "" output) 
@@ -230,7 +231,7 @@
 
             ;; print output per line
             (while (string-match ".*\n" output)
-        
+	      
               ;; clear if a new make started
               (if last-line-was-end-of-build (erase-buffer))
 
@@ -249,19 +250,21 @@
                   (progn
                     (omake-play-sound omake-sound-error)
                     (setq no-error nil)
-                    (omake-display-buffer buffer)))
+					;(omake-display-buffer buffer)
+		    ))
 
               ;; locked
               (if (string-match omake-locked-regexp line)
                   (progn
                     (omake-play-sound omake-sound-error)
                     (setq no-error nil)
-                    (omake-display-buffer buffer)))
+					;(omake-display-buffer buffer)
+		    ))
               
               (if (string-match omake-rebuild-regexp line)
                   (progn
                     (omake-play-sound omake-sound-start)))
-                
+	      
               ;; find the end of build
               (setq last-line-was-end-of-build
                     (string-match "\\*\\*\\* omake: polling for filesystem changes" line))
@@ -272,9 +275,10 @@
                     (if no-error
                         (omake-play-sound omake-sound-success))
                     (setq no-error t)
-                    (omake-display-buffer buffer)))
+					;(omake-display-buffer buffer)
+		    ))
               )
-      
+	    
             ;; if something left, it is not ended with \n. Keep it
             (setq remained-output output)
 
@@ -322,7 +326,7 @@
           (if (progn
                 (if 
                     (if next
-                        ; sometimes the error has tab in its head...
+					; sometimes the error has tab in its head...
                         (re-search-forward omake-error-regexp
                                            nil ; CR BOUND can be used to avoid the summary 
                                            t ; ignore not found error and return simply nil
@@ -338,7 +342,7 @@
                       (setq char-end (string-to-int (match-string 4)))
                       (set-window-point window (if next found-end found-start))
                       (save-excursion
-;                        (if (re-search-backward "Entering directory `\\(.*\\)'" nil t)
+					;                        (if (re-search-backward "Entering directory `\\(.*\\)'" nil t)
                         (if (re-search-forward omake-directory-regexp nil t)
                             (progn 
                               (setq dir (match-string 1))
@@ -348,8 +352,8 @@
                             nil))))
                   (progn
                     (message "No more error found")
-;                    (delete-overlay omake-overlay-log)
-;                    (delete-overlay omake-overlay-source)
+					;                    (delete-overlay omake-overlay-log)
+					;                    (delete-overlay omake-overlay-source)
                     nil)))
               (progn ; search successful: highlight the error line
                 (save-current-buffer (omake-display-error dir file line char-start char-end))
