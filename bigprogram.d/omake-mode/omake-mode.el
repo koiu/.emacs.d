@@ -178,7 +178,7 @@
     buffer-name))
 
 (defun omake-play-sound (file)
-  (start-process "omake-sound" omake-misc-buffer-name "aplay" file))
+  (start-process "omake-sound" omake-misc-buffer-name "aplay" "--duration=8" file))
 
 (defun omake-insert-line (string)
   (save-excursion
